@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KSBD Viewer</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home_style.css') }}">
+</head>
+
+<body>
+    <h1>Kill Six Billion Demons</h1>
+
+    <div class="chapter_list">
+
+        {% for item in chapters %}
+        <a class="chapter" href="{{ url_for('chapter', chapter_id=item[1]) }}">
+            <p>{{ item[0] }}</p>
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</body>
+
+</html>

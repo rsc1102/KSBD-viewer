@@ -1,0 +1,33 @@
+body {
+    background-color: black;
+}
+
+h1 {
+    color: whitesmoke;
+    text-align: center;
+    font-size: 50px;
+}
+
+a.chapter {
+    background-color: lightgray;
+    padding: 10px;
+    margin: 5px;
+    min-width: 100px;
+    width: 8%;
+    align-items: center;
+    border-radius: 10px;
+    text-decoration: none
+}
+
+a.chapter p {
+    color: black;
+    text-align: center;
+    font-weight: bolder;
+}
+
+div.chapter_list {
+    display: flex;
+    max-width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KSBD {{chapter_name}}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='chapter_style.css') }}">
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav_left">
+            <a class="homeButton" href="{{ url_for('home')}}">Home</a>
+        </div>
+        <div class="nav_right">
+            {% if prev_chapter%}
+            <a class="prevButton" href="{{ url_for('chapter', chapter_id=prev_chapter) }}">Prev</a>
+            {% endif %}
+
+            {% if next_chapter%}
+            <a class="nextButton" href="{{ url_for('chapter', chapter_id=next_chapter) }}">Next</a>
+            {% endif %}
+        </div>
+
+    </nav>
+
+    <h1>{{chapter_name}}</h1>
+
+    <div class="images_wrapper">
+        {% for item in image_links %}
+        <div class="image">
+            <img src="{{item}}">
+        </div>
+        {% endfor %}
+
+    </div>
+
+    <footer>
+        <div class="footer_left">
+            <a class="homeButton" href="{{ url_for('home')}}">Home</a>
+        </div>
+        <div class="footer_right">
+            {% if prev_chapter%}
+            <a class="prevButton" href="{{ url_for('chapter', chapter_id=prev_chapter) }}">Prev</a>
+            {% endif %}
+
+            {% if next_chapter%}
+            <a class="nextButton" href="{{ url_for('chapter', chapter_id=next_chapter) }}">Next</a>
+            {% endif %}
+        </div>
+
+    </footer>
+
+</body>
+
+</html>
