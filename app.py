@@ -1,5 +1,7 @@
+import json
+from functools import lru_cache
 from pathlib import Path
-from typing import List
+from typing import Dict, List
 from flask import Flask, abort, render_template
 
 app = Flask(
@@ -9,16 +11,31 @@ app = Flask(
     static_folder=str(Path(__file__).parent / "static"),
 )
 
-CHAPTER_DIR = Path(__file__).parent / "image_links"
+IMAGE_LINKS_FILE = Path(__file__).parent / "image_links.json"
 
 
 def _slug_to_display_name(slug: str) -> str:
     return slug.replace("_", " ")
 
 
+@lru_cache(maxsize=1024)
+def _image_links_map() -> Dict[str, List[str]]:
+    with IMAGE_LINKS_FILE.open(encoding="utf-8") as f:
+        data = json.load(f)
+    cleaned: Dict[str, List[str]] = {}
+    for slug, links in data.items():
+        cleaned_links: List[str] = []
+        for link in links:
+            text = str(link).strip()
+            if text:
+                cleaned_links.append(text)
+        cleaned[str(slug)] = cleaned_links
+    return cleaned
+
+
 def _chapter_slugs() -> List[str]:
-    """Return all chapter slugs based on available text files."""
-    return sorted(path.stem for path in CHAPTER_DIR.glob("*.txt"))
+    """Return all chapter slugs based on available JSON entries."""
+    return sorted(_image_links_map().keys())
 
 
 @app.get("/")
@@ -33,6 +50,7 @@ def home() -> str:
 @app.get("/<chapter_id>")
 def chapter(chapter_id) -> str:
     chapter_slugs = _chapter_slugs()
+    image_links_map = _image_links_map()
     if chapter_id not in chapter_slugs:
         abort(404)
 
@@ -44,12 +62,7 @@ def chapter(chapter_id) -> str:
         else None
     )
 
-    chapter_path = CHAPTER_DIR / f"{chapter_id}.txt"
-    image_links = [
-        line.strip()
-        for line in chapter_path.read_text(encoding="utf-8").splitlines()
-        if line.strip()
-    ]
+    image_links = image_links_map.get(chapter_id, [])
 
     return render_template(
         "chapter.html",
